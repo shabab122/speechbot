@@ -57,6 +57,8 @@
   function labelButton(id, name, text) {
     const button = $(id);
     button.replaceChildren(icon(name), node("span", "", text));
+    button.setAttribute("aria-label", text);
+    button.title = text;
   }
 
   function message(text = "", error = false) {
@@ -108,6 +110,7 @@
 
   const player = new C.SpeechPlayer(synth, window.SpeechSynthesisUtterance, {
     onState: state => {
+      document.body.classList.toggle("is-speaking", state === "playing");
       if (state === "starting") { actualProgress = 0; boundary = null; }
       if (state === "idle") { actualProgress = 0; boundary = null; }
       if (!player.active) renderReading();
@@ -152,7 +155,7 @@
     const playable = speechAvailable && hasText && !missingVoice();
     $("speak-button").disabled = dictating() || (!activeScript && !playable);
     const playing = activeScript && player.state !== "paused";
-    labelButton("speak-button", playing ? "pause" : "play", playing ? (player.state === "starting" ? "Starting…" : "Pause reading") : activeScript ? "Resume reading" : "Play script");
+    labelButton("speak-button", playing ? "pause" : "play", playing ? (player.state === "starting" ? "Starting…" : "Pause") : activeScript ? "Resume" : "Speak");
     $("speak-button").setAttribute("aria-label", activeScript ? (player.state === "paused" ? "Resume reading" : "Pause reading") : "Read script aloud");
     $("stop-button").disabled = !player.active && !dictating();
     $("restart-button").disabled = !playable || dictating();
@@ -194,7 +197,8 @@
     $("player-card").classList.toggle("is-paused", player.state === "paused");
     const names = { idle: "Ready to play", starting: "Starting…", playing: activePreview ? "Voice preview" : "Now reading", paused: "Paused", finished: player.context === "preview" ? "Ready to play" : "All read" };
     $("player-state").textContent = speechAvailable ? names[player.state] : "Speech unavailable";
-    $("player-caption").textContent = player.state === "paused" ? "Take your time. Your words will be here." : activePreview ? "A quick hello from your selected voice." : player.state === "playing" ? "Settle in. Let your words do the talking." : settings.volume === 0 ? "Volume is muted. Raise it in Voice settings to listen." : "A voice for a story, a note, or your next big idea.";
+    $("player-caption").hidden = settings.volume !== 0;
+    $("player-caption").textContent = "Muted. Raise the volume in More controls to listen.";
   }
 
   function renderReading() {
@@ -258,6 +262,7 @@
     accentSelect.disabled = false;
     $("voice-count").textContent = `${voices.length} ${voices.length === 1 ? "voice" : "voices"} on this device`;
     $("voice-hint").textContent = missingVoice() ? "No matching voice is installed. Add a voice in your device's language or accessibility settings, then reload." : !voices.length && voicesSettled ? "No named voices were found. The browser's system default will be tried." : "Voices are provided by your device and browser.";
+    $("voice-hint").hidden = !(missingVoice() || (!voices.length && voicesSettled));
     refreshControls();
   }
 
@@ -271,6 +276,11 @@
     $("rate-output").textContent = `${settings.rate.toFixed(1)}×`;
     $("pitch-output").textContent = settings.pitch.toFixed(1);
     $("volume-output").textContent = `${Math.round(settings.volume * 100)}%`;
+    document.querySelectorAll("[data-rate]").forEach(button => {
+      const selected = Number(button.dataset.rate) === settings.rate;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
     document.querySelectorAll("[data-preset]").forEach(button => {
       const preset = PRESETS[button.dataset.preset];
       const selected = preset.rate === settings.rate && preset.pitch === settings.pitch;
@@ -544,8 +554,8 @@
     const grid = $("saved-grid");
     grid.replaceChildren();
     $("saved-empty").hidden = scripts.length > 0;
-    $("saved-empty").querySelector("h2").textContent = workspace.scripts.length ? "No words by that name, yet." : "Your next great idea belongs here.";
-    $("saved-empty").querySelector("p").textContent = workspace.scripts.length ? "Try a different title or a few words from your script." : "Save a script from the studio to keep its words and voice settings together.";
+    $("saved-empty").querySelector("h2").textContent = workspace.scripts.length ? "No matching scripts." : "No saved scripts yet.";
+    $("saved-empty").querySelector("p").textContent = workspace.scripts.length ? "Try another word or title." : "Save a script to keep it here.";
     $("saved-empty").querySelector("a").hidden = workspace.scripts.length > 0;
     for (const script of scripts) {
       const card = node("article", "saved-card");
@@ -557,7 +567,7 @@
       heading.dir = "auto";
       const meta = node("p", "saved-meta", `${C.wordCount(script.text)} words · ${script.settings.rate.toFixed(1)}× · ~${C.formatTime(C.estimateSeconds(script.text, script.settings.rate))}`);
       const actions = node("div", "saved-card-actions");
-      const open = node("button", "text-button", "Open in studio");
+      const open = node("button", "text-button", "Open script");
       open.type = "button";
       open.append(icon("arrow"));
       open.addEventListener("click", () => replaceDraft(script, script.settings));
@@ -603,7 +613,7 @@
       $("main-content").focus({ preventScroll: true });
       window.scrollTo?.(0, 0);
     }
-    document.title = saved ? "Saved scripts — SpeechBot Studio" : "SpeechBot Studio — Give your words a voice";
+    document.title = saved ? "Saved scripts — SpeechBot" : "SpeechBot — Your speak assistant";
   }
 
   function setTheme(theme) {
@@ -611,13 +621,13 @@
     document.documentElement.dataset.theme = theme;
     $("theme-button").replaceChildren(icon(theme === "dark" ? "sun" : "moon"));
     $("theme-button").setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} theme`);
-    document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#141d1a" : "#f6f5f0";
+    document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#080c1d" : "#f1f3fc";
   }
 
   function initialize() {
     titleInput.value = workspace.draft.title;
     textArea.value = workspace.draft.text;
-    setTheme(workspace.theme || (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+    setTheme(workspace.theme || "dark");
     $("storage-warning").hidden = storageAvailable;
     const mac = /Mac|iPhone|iPad/.test(navigator.platform || "");
     document.querySelectorAll(".play-shortcut").forEach(key => { key.textContent = mac ? "⌘" : "Ctrl"; });
@@ -658,6 +668,8 @@
     $("voice-select").addEventListener("change", event => { settings.voice = event.target.value; preferredVoice = settings.voice; settingsChanged(); });
     $("dictation-language").addEventListener("change", event => { settings.dictationLanguage = event.target.value; queueSave(); });
     for (const key of ["rate", "pitch", "volume"]) $(`${key}-range`).addEventListener("input", event => { settings[key] = Number(event.target.value); settingsChanged(); });
+    document.querySelectorAll("[data-rate]").forEach(button => button.addEventListener("click", () => { settings.rate = Number(button.dataset.rate); settingsChanged(); }));
+    $("advanced-button").addEventListener("click", () => $("voice-settings-dialog").showModal());
     document.querySelectorAll("[data-preset]").forEach(button => button.addEventListener("click", () => { Object.assign(settings, PRESETS[button.dataset.preset]); settingsChanged(); }));
     $("reset-settings").addEventListener("click", () => { Object.assign(settings, { rate: 1, pitch: 1, volume: 1 }); settingsChanged(); toast("Voice adjustments reset."); });
     document.querySelectorAll("[data-sample]").forEach(button => button.addEventListener("click", () => loadSample(button.dataset.sample)));
@@ -674,7 +686,7 @@
     document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click", () => $(button.dataset.close).close()));
     window.addEventListener("hashchange", () => renderRoute(true));
     document.addEventListener("keydown", event => {
-      if (event.isComposing || $("confirm-dialog").open || $("guide-dialog").open) return;
+      if (event.isComposing || $("confirm-dialog").open || $("guide-dialog").open || $("voice-settings-dialog").open) return;
       if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key === "Enter" && !$("studio-view").hidden) { event.preventDefault(); togglePlayback(); }
       if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "s" && !$("studio-view").hidden) { event.preventDefault(); saveScript(); }
       if (event.key === "Escape") { player.stop(); stopDictation(true); }

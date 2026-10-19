@@ -11,6 +11,7 @@ const PUBLIC_FILES = new Map([
   ["/script.js", ["script.js", "text/javascript; charset=utf-8"]],
   ["/speech-core.js", ["speech-core.js", "text/javascript; charset=utf-8"]],
   ["/assets/favicon.svg", ["assets/favicon.svg", "image/svg+xml"]],
+  ["/assets/bot.css", ["assets/bot.css", "text/css; charset=utf-8"]],
 ]);
 
 function parsePort(value = "5185") {
@@ -50,7 +51,7 @@ function main() {
     console.error(error.code === "EADDRINUSE" ? `Port ${port} is already in use. Try PORT=5186 npm start. SpeechBot does not stop other apps or switch ports automatically.` : `Could not start SpeechBot: ${error.message}`);
     process.exitCode = 1;
   });
-  server.listen(port, "127.0.0.1", () => console.log(`\nSpeechBot Studio\nOpen http://127.0.0.1:${port}\nPress Ctrl+C to stop.\n`));
+  server.listen(port, "127.0.0.1", () => console.log(`\nSpeechBot — local development\nOpen http://127.0.0.1:${port}\nPress Ctrl+C to stop.\n`));
 }
 
 if (require.main === module) main();

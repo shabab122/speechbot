@@ -1,0 +1,25 @@
+/* Original SpeechBot mascot, preserved from the supplied project. */
+.robot-scene { position: absolute; left: -62px; bottom: -1.5rem; width: min(380px, 100%); aspect-ratio: 1.12; overflow: hidden; isolation: isolate; border-radius: 44% 44% 15% 15%; }
+.scene-glow { position: absolute; z-index: -3; top: 2%; left: 16%; width: 76%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 52% 53%, #f8e2c1 0 20%, #c88dcd 26%, #693f9c 54%, transparent 70%); opacity: .97; }
+.planet-ring { position: absolute; z-index: -2; inset: 3% 7% 9%; border: 1px solid rgba(145, 109, 255, .25); border-radius: 50%; transform: rotate(-28deg); box-shadow: 0 0 35px rgba(190, 68, 212, .24); }
+.ground { position: absolute; z-index: 1; bottom: -11%; left: -13%; width: 132%; height: 31%; border-radius: 48% 53% 0 0; transform: rotate(-5deg); background: linear-gradient(171deg, #e45a61 0 22%, #9f364c 24% 52%, #59233e 65%); box-shadow: inset 0 17px 28px rgba(251, 146, 119, .42); }
+.ground::before, .ground::after { content: ""; position: absolute; border-radius: 49%; background: #5b2441; opacity: .55; }
+.ground::before { width: 42%; height: 19%; left: 21%; top: 43%; } .ground::after { width: 31%; height: 15%; right: 7%; top: 19%; }
+.robot { position: absolute; z-index: 2; left: 50%; bottom: 16%; width: 43%; height: 70%; transform: translateX(-50%); filter: drop-shadow(0 20px 14px rgba(22, 0, 23, .48)); }
+.robot-head { position: absolute; left: 3%; top: 13%; width: 94%; height: 42%; overflow: hidden; border: 5px solid #431638; border-radius: 47% 47% 41% 41%; background: linear-gradient(115deg, #f7a996, #b63e7b 48%, #512462 78%); box-shadow: inset 10px 8px 12px rgba(255, 210, 185, .55), inset -12px -11px 15px rgba(38, 13, 55, .65); }
+.head-shine { position: absolute; left: 10%; top: 2%; width: 21%; height: 77%; border-radius: 45%; background: linear-gradient(90deg, rgba(255,255,255,.55), transparent); transform: rotate(20deg); opacity: .62; }
+.face-panel { position: absolute; left: 26%; top: 22%; width: 48%; height: 50%; display: grid; place-items: center; border: 3px solid #431638; border-radius: 43%; background: #15113a; box-shadow: inset 0 0 13px #02051b, 0 0 12px rgba(239, 69, 198, .65); }
+.eye { width: 46%; aspect-ratio: 1; border: 2px solid #163942; border-radius: 50%; background: #54fff4; box-shadow: 0 0 4px #fff, 0 0 15px 4px #24e8e7, inset 3px 3px 5px #baffff; }
+.eye::after { content: ""; display: block; width: 30%; height: 30%; margin: 13%; border-radius: 50%; background: rgba(255,255,255,.7); }
+.ear { position: absolute; top: 36%; width: 18%; height: 30%; border: 3px solid #421537; border-radius: 40%; background: #6e255d; }
+.left-ear { left: -12%; } .right-ear { right: -12%; }
+.antenna { position: absolute; z-index: -1; top: -3%; left: 51%; width: 3px; height: 21%; background: #ff9eb2; transform: rotate(-1deg); transform-origin: bottom; }
+.antenna span { position: absolute; top: -8px; left: 50%; width: 12px; height: 12px; border-radius: 50%; background: #fa4c66; transform: translateX(-50%); box-shadow: 0 0 13px 3px rgba(255, 61, 96, .72); }
+.robot-neck { position: absolute; top: 52%; left: 42%; width: 17%; height: 9%; border: 3px solid #431638; background: #7b2859; }
+.robot-body { position: absolute; top: 58%; left: 16%; width: 68%; height: 31%; overflow: hidden; border: 4px solid #401636; border-radius: 22% 22% 14% 14%; background: linear-gradient(90deg, #912d5e, #e26085 48%, #6e285f); box-shadow: inset 8px 5px 8px rgba(255, 178, 162, .45), inset -8px -7px 11px rgba(37, 9, 47, .5); }
+.robot-body span { position: absolute; top: 23%; left: 27%; width: 47%; height: 47%; border: 3px solid #46173a; background: #ba4673; }
+.robot-body b { position: absolute; top: 36%; left: 45%; width: 10%; height: 10%; border-radius: 50%; background: #63faf2; box-shadow: 0 0 7px #63faf2; }
+.arm { position: absolute; top: 61%; width: 16%; height: 27%; border: 4px solid #411536; background: #8e2d5d; }
+.left-arm { left: 0; transform: rotate(9deg); border-radius: 35% 20% 47% 51%; } .right-arm { right: 0; transform: rotate(-9deg); border-radius: 20% 35% 51% 47%; }
+.leg { position: absolute; top: 86%; width: 17%; height: 18%; border: 4px solid #3d1433; background: #69254d; } .left-leg { left: 23%; } .right-leg { right: 23%; }
+

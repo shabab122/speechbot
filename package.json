@@ -1,10 +1,11 @@
 {
   "name": "speechbot-studio",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "A dependency-free text-to-speech and dictation studio with local scripts.",
   "scripts": {
     "start": "node scripts/serve.cjs",
+    "build": "node scripts/build-static.cjs",
     "check": "node scripts/check.cjs",
     "test": "node --test tests/*.test.cjs",
     "verify": "npm run check && npm test"
