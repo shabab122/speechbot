@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.0 — Compact SpeechBot
+
+- Restored the original CSS robot illustration and a compact, space-inspired layout.
+- Replaced the large descriptive workspace with one text-to-speech card.
+- Kept language, voice, quick speed buttons, and speech playback on the main screen.
+- Moved pitch, volume, reading presets, and dictation language into More controls.
+- Retained saved scripts, auto-save, dictation, reading view, themes, and text import/export.
+- Added a hosted URL to the README so normal use does not require a local server.
+- Added a static asset build command and updated regression coverage for compact controls.
+
 ## 2.0.0 — SpeechBot Studio
 
 ### Interface

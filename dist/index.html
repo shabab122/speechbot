@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080c1d" />
+    <meta name="description" content="A friendly voice for your words. Type, choose a language, and listen with SpeechBot." />
+    <title>SpeechBot — Your speak assistant</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/bot.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="speech-core.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to SpeechBot</a>
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 10v4m4-8v12m5-16v20m5-16v12m4-8v4"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h7m4 0h5M4 17h3m4 0h9M11 4v6M7 14v6"/></symbol>
+      <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 13h8m-8 4h5"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10H3Z"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="4"/></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-restart" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-3 0h6"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 16v4h16v-4"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 16v4h16v-4"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H4v14h4"/></symbol>
+      <symbol id="i-save" viewBox="0 0 24 24"><path d="M20 21H4V3h13l3 3ZM8 3v6h8V3M8 21v-8h8v8"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11Z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 1 1 4 2c-1.5 1-1.5 1-1.5 3M12 17h.01"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 14v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="12" width="4" height="9" rx="2"/><rect x="17" y="12" width="4" height="9" rx="2"/></symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C8 2 2 9 6 16s16 4 14-13ZM5 21 16 8M10 15l-1-5m1 5 5 1"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6C9 3 5 3 2 4v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-3-1-7-1-10 2Zm0 0v15"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    </svg>
+    <div class="star-field" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#studio" aria-label="SpeechBot home"><img src="assets/favicon.svg" width="34" height="34" alt="" /><span>SpeechBot<span class="brand-dot">.</span></span></a>
+      <nav class="header-actions" aria-label="SpeechBot tools">
+        <a id="studio-link" class="nav-link is-active" href="#studio" aria-current="page">Speak</a>
+        <a id="saved-link" class="nav-link saved-link" href="#saved"><svg class="icon"><use href="#i-folder"/></svg><span>Saved</span><span id="nav-count" class="count-badge">0</span></a>
+        <button id="theme-button" class="icon-button" type="button" aria-label="Switch to light theme" title="Switch theme"><svg class="icon"><use href="#i-sun"/></svg></button>
+        <button id="guide-button" class="icon-button" type="button" aria-label="Quick guide" title="Quick guide"><svg class="icon"><use href="#i-help"/></svg></button>
+      </nav>
+    </header>
+    <main id="main-content" class="main-shell" tabindex="-1">
+      <div id="storage-warning" class="notice warning" role="status" hidden>Storage is unavailable. Export your text to keep a copy.</div>
+      <noscript><p class="notice warning">Enable JavaScript to use SpeechBot.</p></noscript>
+      <section id="studio-view" class="speech-layout" aria-labelledby="studio-heading">
+        <div class="hero">
+          <p class="eyebrow"><span></span> YOUR SPEAK ASSISTANT</p>
+          <h1 id="studio-heading">Text to<br/><span>Speech.</span></h1>
+          <p class="hero-caption">Your words. Your language. Your voice.</p>
+        <div class="robot-scene" aria-hidden="true">
+          <div class="scene-glow"></div>
+          <div class="planet-ring"></div>
+          <div class="robot">
+            <div class="antenna"><span></span></div>
+            <div class="robot-head">
+              <div class="ear left-ear"></div>
+              <div class="ear right-ear"></div>
+              <div class="face-panel"><div class="eye"></div></div>
+              <div class="head-shine"></div>
+            </div>
+            <div class="robot-neck"></div>
+            <div class="robot-body"><span></span><b></b></div>
+            <div class="arm left-arm"></div>
+            <div class="arm right-arm"></div>
+            <div class="leg left-leg"></div>
+            <div class="leg right-leg"></div>
+          </div>
+          <div class="ground"></div>
+        </div>
+        </div>
+        <div class="speech-card">
+          <section class="editor-card" aria-labelledby="editor-heading">
+            <div class="card-heading"><h2 id="editor-heading">Let's hear it.</h2><button id="new-script" class="icon-button small" type="button" aria-label="New script" title="New script"><svg class="icon"><use href="#i-plus"/></svg></button></div>
+            <div class="editor-tools">
+              <label for="script-title" class="visually-hidden">Script title</label><input id="script-title" class="script-title" type="text" maxlength="80" placeholder="Untitled script" autocomplete="off" />
+              <div class="tool-group">
+                <button id="import-button" class="icon-button small" type="button" aria-label="Import text" title="Import .txt or .md"><svg class="icon"><use href="#i-upload"/></svg></button>
+                <button id="copy-button" class="icon-button small" type="button" aria-label="Copy text" title="Copy text" disabled><svg class="icon"><use href="#i-copy"/></svg></button>
+                <button id="export-button" class="icon-button small" type="button" aria-label="Export text" title="Export .txt" disabled><svg class="icon"><use href="#i-download"/></svg></button>
+                <button id="save-button" class="icon-button small icon-label" type="button" aria-label="Save script" title="Save script" disabled><svg class="icon"><use href="#i-save"/></svg><span class="visually-hidden">Save script</span></button>
+              </div>
+              <input id="file-input" type="file" accept=".txt,.md,text/plain,text/markdown" hidden />
+            </div>
+            <div class="input-wrap">
+              <label for="speech-text" class="visually-hidden">Text to speak</label>
+              <textarea id="speech-text" maxlength="12000" rows="7" dir="auto" spellcheck="true" placeholder="Type or paste something to hear it…" aria-describedby="editor-stats"></textarea>
+              <div id="reading-text" class="reading-text" dir="auto" role="region" aria-label="Reading view" tabindex="0" hidden></div>
+              <p id="dictation-interim" class="dictation-interim" aria-live="polite" hidden></p>
+              <div class="input-tools">
+                <button id="reading-toggle" class="icon-button small icon-label" type="button" aria-label="Reading view" title="Reading view" aria-pressed="false" disabled><svg class="icon"><use href="#i-eye"/></svg><span class="visually-hidden">Reading view</span></button>
+                <button id="clear-button" class="icon-button small" type="button" aria-label="Clear text" title="Clear text" disabled><svg class="icon"><use href="#i-trash"/></svg></button>
+                <button id="mic-button" class="icon-button mic-button icon-label" type="button" aria-label="Start dictation" title="Dictate" aria-pressed="false" aria-describedby="dictation-hint"><svg class="icon"><use href="#i-mic"/></svg><span class="visually-hidden">Dictate</span></button>
+              </div>
+            </div>
+            <div id="editor-stats" class="editor-stats"><span id="word-count">0 words</span><span id="char-count">0 / 12,000 characters</span><span id="time-estimate" class="visually-hidden">~00:00</span></div>
+            <div class="voice-grid">
+              <div class="field"><label for="accent-select">Language</label><select id="accent-select"><option value="">All languages</option></select></div>
+              <div class="field"><label for="voice-select">Voice</label><select id="voice-select" disabled><option value="">Loading voices…</option></select></div>
+              <button id="preview-button" class="icon-button preview-button icon-label" type="button" aria-label="Preview voice" title="Preview voice"><svg class="icon"><use href="#i-play"/></svg><span class="visually-hidden">Preview voice</span></button>
+            </div>
+            <p id="voice-hint" class="field-hint" hidden></p><span id="voice-count" class="visually-hidden"></span>
+            <div class="quick-settings"><div class="quick-speed"><span>Speed</span><div class="quick-rates" role="group" aria-label="Quick reading speed"><button type="button" data-rate="0.8" aria-pressed="false">0.8×</button><button type="button" data-rate="1" class="is-selected" aria-pressed="true">1×</button><button type="button" data-rate="1.5" aria-pressed="false">1.5×</button></div></div><button id="advanced-button" class="text-button" type="button"><svg class="icon"><use href="#i-sliders"/></svg>More controls</button></div>
+          </section>
+          <section id="player-card" class="player-card" aria-labelledby="player-heading">
+            <h2 id="player-heading" class="visually-hidden">Speech playback</h2>
+            <div class="player-controls"><button id="restart-button" class="icon-button" type="button" aria-label="Read from the beginning" title="Read from beginning" disabled><svg class="icon"><use href="#i-restart"/></svg></button><button id="speak-button" class="button button-primary play-button" type="button" disabled><svg class="icon"><use href="#i-play"/></svg><span>Speak</span></button><button id="stop-button" class="icon-button" type="button" aria-label="Stop reading" title="Stop" disabled><svg class="icon"><use href="#i-stop"/></svg></button></div>
+            <div class="playback-line"><span id="player-state" role="status">Ready to play</span><span class="playback-time"><span id="elapsed-time">00:00</span><span>/</span><span id="total-time">~00:00</span></span></div>
+            <progress id="playback-progress" max="100" value="0" aria-label="Approximate reading progress"></progress>
+            <div id="activity-wave" class="activity-wave" aria-hidden="true"></div>
+            <p id="player-caption" class="player-caption" hidden></p>
+          </section>
+          <div class="card-bottom"><div class="sample-list"><span>Try:</span><button type="button" data-sample="mindful">Calm</button><button type="button" data-sample="story">Story</button><button type="button" data-sample="bangla" lang="bn">বাংলা</button></div><span id="autosave-status" class="autosave"><span class="status-dot"></span>Draft ready</span></div>
+        </div>
+      </section>
+      <section id="saved-view" aria-labelledby="saved-heading" hidden>
+        <div class="saved-heading"><h1 id="saved-heading">Saved scripts</h1><button id="saved-new-script" class="button button-primary" type="button"><svg class="icon"><use href="#i-plus"/></svg>New script</button></div>
+        <div class="saved-toolbar"><label class="search-field"><svg class="icon"><use href="#i-search"/></svg><span class="visually-hidden">Search saved scripts</span><input id="script-search" type="search" placeholder="Find a script…" maxlength="100"/></label><span id="saved-summary" role="status">0 of 20 scripts</span></div>
+        <div id="saved-grid" class="saved-grid"></div>
+        <div id="saved-empty" class="empty-state"><svg class="icon"><use href="#i-folder"/></svg><h2>No saved scripts yet.</h2><p>Save a script to keep it here.</p><a class="button button-primary" href="#studio">Back to SpeechBot<svg class="icon"><use href="#i-arrow"/></svg></a></div>
+        <p class="saved-note">Saved in this browser. Export a copy to keep it.</p>
+      </section>
+      <div id="support-message" class="notice" role="status" aria-live="polite" hidden></div>
+    </main>
+    <footer class="site-footer"><span>SpeechBot</span><span>Made for listening.</span></footer>
+    <dialog id="voice-settings-dialog" class="settings-dialog" aria-labelledby="settings-heading">
+      <div class="dialog-heading"><h2 id="settings-heading">Fine-tune your voice</h2><button class="icon-button" type="button" data-close="voice-settings-dialog" aria-label="Close voice settings"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <fieldset class="preset-fieldset"><legend>Reading style</legend><div class="preset-buttons"><button type="button" class="preset is-selected" data-preset="natural" aria-pressed="true">Natural</button><button type="button" class="preset" data-preset="story" aria-pressed="false">Story</button><button type="button" class="preset" data-preset="study" aria-pressed="false">Study</button></div></fieldset>
+      <div class="range-field"><div class="range-label"><label for="rate-range">Speed</label><output id="rate-output" for="rate-range">1.0×</output></div><input id="rate-range" type="range" min="0.5" max="2" step="0.1" value="1"/><div class="range-extremes"><span>Slower</span><span>Faster</span></div></div>
+      <div class="range-field"><div class="range-label"><label for="pitch-range">Pitch</label><output id="pitch-output" for="pitch-range">1.0</output></div><input id="pitch-range" type="range" min="0.5" max="1.5" step="0.1" value="1"/><div class="range-extremes"><span>Lower</span><span>Higher</span></div></div>
+      <div class="range-field"><div class="range-label"><label for="volume-range">Volume</label><output id="volume-output" for="volume-range">100%</output></div><input id="volume-range" type="range" min="0" max="1" step="0.05" value="1"/><div class="range-extremes"><span>Quiet</span><span>Loud</span></div></div>
+      <div class="field dictation-field"><label for="dictation-language">Dictation language</label><select id="dictation-language" aria-describedby="dictation-hint"><option value="en-US">English (US)</option><option value="en-GB">English (UK)</option><option value="bn-BD">বাংলা (BD)</option><option value="bn-IN">বাংলা (IN)</option><option value="hi-IN">हिन्दी</option><option value="ar-SA">العربية</option><option value="es-ES">Español</option><option value="fr-FR">Français</option><option value="de-DE">Deutsch</option><option value="ja-JP">日本語</option><option value="zh-CN">中文</option></select></div>
+      <p id="dictation-hint" class="field-hint">Dictation may use your browser's online recognition service.</p>
+      <div class="settings-actions"><button id="reset-settings" class="text-button" type="button"><svg class="icon"><use href="#i-restart"/></svg>Reset</button><button class="button button-primary" type="button" data-close="voice-settings-dialog">Done<svg class="icon"><use href="#i-check"/></svg></button></div>
+    </dialog>
+    <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-heading">
+      <div class="dialog-heading"><span class="eyebrow">QUICK GUIDE</span><button class="icon-button" type="button" data-close="guide-dialog" aria-label="Close quick guide"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <h2 id="guide-heading">Make it speak.</h2>
+      <ol class="guide-steps"><li><strong>Make room for an idea.</strong><p>Type, paste, import a text file, or try a prompt. Add a title to keep things organized.</p></li><li><strong>Find the right voice.</strong><p>Choose a language and a device voice. Preview it, then adjust speed, pitch, and volume.</p></li><li><strong>Sit back and listen.</strong><p>Play, pause, resume, or stop. Reading view can highlight words when your voice supports word events.</p></li><li><strong>Keep what you love.</strong><p>Save up to 20 scripts with their voice settings, or export your words as a .txt file.</p></li></ol>
+      <div class="keyboard-guide"><h3>A couple of shortcuts</h3><div><span>Play / pause</span><span><kbd class="play-shortcut">Ctrl</kbd> <kbd>Enter</kbd></span></div><div><span>Save script</span><span><kbd class="play-shortcut">Ctrl</kbd> <kbd>S</kbd></span></div><div><span>Stop playback / dictation</span><kbd>Esc</kbd></div></div>
+      <details class="browser-details"><summary>Browser support &amp; privacy</summary><p id="browser-support"></p><p>Voices, pronunciation, pause behavior, and highlighting vary by device. Dictation needs microphone permission and may send audio to your browser provider. Some speech voices also use online services.</p><p>SpeechBot has no speech-generation backend or analytics. Scripts are kept in this browser; clearing site data removes them. Private browsing and opening a different address may use separate storage.</p><p>Audio downloads are unavailable: browser speech synthesis provides playback, without an audio export file. Export .txt saves your script text.</p><p>Reading times and progress are estimates. Language selection changes the reading voice; it does not translate text. Bangla playback requires a Bangla voice installed on your device. Dictation support varies by browser; use HTTPS or localhost.</p></details>
+      <button class="button button-primary dialog-done" type="button" data-close="guide-dialog">Let's make something<svg class="icon"><use href="#i-arrow"/></svg></button>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-heading" aria-describedby="confirm-description"><form method="dialog"><span class="confirm-icon"><svg class="icon"><use href="#i-file"/></svg></span><h2 id="confirm-heading">Replace this draft?</h2><p id="confirm-description">Save or export the current script first if you want to keep it.</p><div class="dialog-actions"><button class="button button-outline" value="cancel" autofocus>Keep editing</button><button id="confirm-action" class="button button-primary" value="confirm">Replace draft</button></div></form></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden><svg class="icon"><use href="#i-check"/></svg><span id="toast-text"></span></div>
+  </body>
+</html>

@@ -7,7 +7,7 @@ let failures = 0;
 function check(condition, description) {
   if (!condition) { console.error(`FAIL: ${description}`); failures += 1; }
 }
-for (const file of ["speech-core.js", "script.js", "scripts/serve.cjs", "scripts/check.cjs"]) {
+for (const file of ["speech-core.js", "script.js", "scripts/serve.cjs", "scripts/build-static.cjs", "scripts/check.cjs"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(root, file)], { encoding: "utf8" });
   check(result.status === 0, `${file} parses: ${result.stderr}`);
 }
@@ -20,7 +20,7 @@ for (const match of html.matchAll(/(?:aria-labelledby|aria-describedby|for)="([^
   for (const id of match[1].split(/\s+/)) check(ids.includes(id), `Accessible reference #${id} exists`);
 }
 for (const match of html.matchAll(/href="#([^"]+)"/g)) check(["studio", "saved"].includes(match[1]) || ids.includes(match[1]), `Local link #${match[1]} resolves`);
-for (const file of ["style.css", "speech-core.js", "script.js", "assets/favicon.svg"]) check(fs.existsSync(path.join(root, file)), `Public asset ${file} exists`);
+for (const file of ["style.css", "speech-core.js", "script.js", "assets/favicon.svg", "assets/bot.css"]) check(fs.existsSync(path.join(root, file)), `Public asset ${file} exists`);
 check(!/<(?:script|link)[^>]+(?:src|href)="https?:\/\//i.test(html), "The app has no CDN script or stylesheet dependency");
 check(html.includes('name="viewport"') && html.includes('lang="en"'), "Viewport and page language are set");
 if (failures) process.exitCode = 1;

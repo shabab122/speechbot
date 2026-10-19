@@ -20,12 +20,13 @@ test("public files have correct types; HEAD returns headers without a body", asy
   const get = await request("/");
   assert.equal(get.status, 200);
   assert.match(get.headers["Content-Type"], /text\/html/);
-  assert.match(get.body.toString(), /SpeechBot Studio/);
+  assert.match(get.body.toString(), /SpeechBot — Your speak assistant/);
   const head = await request("/speech-core.js", "HEAD");
   assert.equal(head.status, 200);
   assert.ok(head.headers["Content-Length"] > 0);
   assert.equal(head.body, undefined);
   assert.equal((await request("/assets/favicon.svg")).headers["Content-Type"], "image/svg+xml");
+  assert.match((await request("/assets/bot.css")).headers["Content-Type"], /text\/css/);
 });
 
 test("server prevents arbitrary project file reads, encoded traversal and unsupported methods", async () => {

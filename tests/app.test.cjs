@@ -75,7 +75,8 @@ function createApp({ unsupported = false, storageBlocked = false, stored = null,
   ["h2", "p", "a"].forEach(tag => empty.append(new Element(tag)));
   const presetButtons = ["natural", "story", "study"].map(name => { const e = new Element("button"); e.dataset.preset = name; return e; });
   const sampleButtons = ["mindful", "story", "bangla"].map(name => { const e = new Element("button"); e.dataset.sample = name; return e; });
-  const closeButtons = ["guide-dialog"].map(id => { const e = new Element("button"); e.dataset.close = id; return e; });
+  const quickRates = ["0.8", "1", "1.5"].map(rate => { const e = new Element("button"); e.dataset.rate = rate; return e; });
+  const closeButtons = ["guide-dialog", "voice-settings-dialog"].map(id => { const e = new Element("button"); e.dataset.close = id; return e; });
   const meta = new Element("meta");
   const document = new Element("document");
   document.documentElement = new Element("html");
@@ -85,7 +86,7 @@ function createApp({ unsupported = false, storageBlocked = false, stored = null,
   document.createElementNS = (_, tag) => new Element(tag);
   document.createTextNode = text => { const e = new Element("#text"); e.textContent = text; return e; };
   document.querySelector = selector => selector.startsWith("meta") ? meta : null;
-  document.querySelectorAll = selector => ({ "[data-preset]": presetButtons, "[data-sample]": sampleButtons, "[data-close]": closeButtons, ".play-shortcut": [] })[selector] || [];
+  document.querySelectorAll = selector => ({ "[data-preset]": presetButtons, "[data-rate]": quickRates, "[data-sample]": sampleButtons, "[data-close]": closeButtons, ".play-shortcut": [] })[selector] || [];
   const values = new Map(stored ? [["speechbot-studio:v2", stored]] : []);
   const timers = new Map();
   let timerId = 0;
@@ -117,7 +118,7 @@ function createApp({ unsupported = false, storageBlocked = false, stored = null,
   const context = vm.createContext({ window, document, navigator, location: { hash: "#studio" }, Intl, Option: function (text, value) { const e = new Element("option"); e.textContent = text; e.value = value; return e; }, Blob, URL, Date, Math, setTimeout: callback => { const id = ++timerId; timers.set(id, callback); return id; }, clearTimeout: id => timers.delete(id), setInterval() {} });
   vm.runInContext(fs.readFileSync(path.join(ROOT, "script.js"), "utf8"), context, { filename: "script.js" });
   const $ = id => elements.get(id);
-  return { $, context, window, document, values, utterances, synth, presetButtons, sampleButtons, recognitionInstances, flushTimers: () => { for (const [id, callback] of [...timers]) { timers.delete(id); callback(); } }, saved: () => JSON.parse(values.get("speechbot-studio:v2")) };
+  return { $, context, window, document, values, utterances, synth, presetButtons, quickRates, sampleButtons, closeButtons, recognitionInstances, flushTimers: () => { for (const [id, callback] of [...timers]) { timers.delete(id); callback(); } }, saved: () => JSON.parse(values.get("speechbot-studio:v2")) };
 }
 
 async function enter(app, text, title = "") {
@@ -157,7 +158,7 @@ test("drafts, settings, theme, and scripts persist and restore; saving updates t
   assert.equal(next.$("script-title").value, "Keep me");
   assert.equal(next.$("rate-range").value, "1.4");
   assert.equal(next.window.SpeechCore, C);
-  assert.match(next.$("theme-button").getAttribute("aria-label"), /light/);
+  assert.match(next.$("theme-button").getAttribute("aria-label"), /dark/);
 });
 
 test("storage denial shows session-only state while saving and editing continue", async () => {
@@ -294,4 +295,27 @@ test("recognition permission errors remain visible when recognition ends", async
   assert.match(app.$("support-message").textContent, /access was blocked/);
   assert.equal(app.$("speech-text").readOnly, false);
   assert.equal(app.$("mic-button").getAttribute("aria-pressed"), "false");
+});
+
+test("compact quick speeds update full controls, selected state, estimates and persisted preferences", async () => {
+  const app = createApp();
+  await enter(app, Array(150).fill("word").join(" "));
+  await app.quickRates[2].click();
+  app.flushTimers();
+  assert.equal(app.$("rate-range").value, "1.5");
+  assert.equal(app.$("rate-output").textContent, "1.5×");
+  assert.equal(app.quickRates[2].getAttribute("aria-pressed"), "true");
+  assert.equal(app.quickRates[1].getAttribute("aria-pressed"), "false");
+  assert.equal(app.$("time-estimate").textContent, "~00:40");
+  assert.equal(app.saved().settings.rate, 1.5);
+});
+
+test("extra controls open only on request and close independently from the compact screen", async () => {
+  const app = createApp();
+  assert.ok(!app.$("voice-settings-dialog").open);
+  await app.$("advanced-button").click();
+  assert.equal(app.$("voice-settings-dialog").open, true);
+  await app.closeButtons[1].click();
+  assert.equal(app.$("voice-settings-dialog").open, false);
+  assert.equal(app.$("studio-view").hidden, false);
 });
